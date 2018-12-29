@@ -17,6 +17,15 @@ func check(e error) {
 	}
 }
 
+func assemble(s string) (string, bool) {
+	switch t := commandType(s); t {
+	case A_COMMAND, C_COMMAND, L_COMMAND:
+		return s + "!", true
+	case IGNORE:
+	}
+	return "", false
+}
+
 func main() {
 	fname := os.Args[1]
 	fsplit := strings.Split(fname, ".")
@@ -33,12 +42,9 @@ func main() {
 	writer := bufio.NewWriter(wfile)
 	for scanner.Scan() {
 		line := scanner.Text()
-		switch t := commandType(line); t {
-		case A_COMMAND, C_COMMAND, L_COMMAND:
-			fmt.Fprintln(writer, line+"!")
-			break
-		case IGNORE:
-			break
+		bin, ok := assemble(line)
+		if ok {
+			fmt.Fprintln(writer, bin)
 		}
 	}
 	err = scanner.Err()
