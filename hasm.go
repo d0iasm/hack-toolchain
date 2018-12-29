@@ -33,9 +33,15 @@ func main() {
 	writer := bufio.NewWriter(wfile)
 	for scanner.Scan() {
 		line := scanner.Text()
-                fmt.Fprintln(writer, line + "!")
+		switch t := commandType(line); t {
+		case A_COMMAND, C_COMMAND, L_COMMAND:
+			fmt.Fprintln(writer, line+"!")
+			break
+		case IGNORE:
+			break
+		}
 	}
 	err = scanner.Err()
 	check(err)
-        writer.Flush()
+	writer.Flush()
 }
