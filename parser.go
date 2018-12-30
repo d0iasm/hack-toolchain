@@ -37,7 +37,7 @@ func symbol(s string) string {
 	}
 }
 
-func dest(s string) string {
+func destMnemonic(s string) string {
 	if commandType(s) != C_COMMAND {
 		panic("bad command type")
 	}
@@ -49,7 +49,7 @@ func dest(s string) string {
 	return ss[0]
 }
 
-func comp(s string) string {
+func compMnemonic(s string) string {
 	if commandType(s) != C_COMMAND {
 		panic("bad command type")
 	}
@@ -65,7 +65,7 @@ func comp(s string) string {
 	}
 }
 
-func jump(s string) string {
+func jumpMnemonic(s string) string {
 	if commandType(s) != C_COMMAND {
 		panic("bad command type")
 	}
