@@ -64,3 +64,15 @@ func comp(s string) string {
 		return "0"
 	}
 }
+
+func jump(s string) string {
+	if commandType(s) != C_COMMAND {
+		panic("bad command type")
+	}
+
+	ss := strings.Split(s, ";")
+	if len(ss) == 1 {
+		return "0"
+	}
+	return ss[1]
+}
