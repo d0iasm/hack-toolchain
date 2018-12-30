@@ -28,6 +28,8 @@ func dest(s string) string {
 
 func comp(s string) string {
 	switch s {
+	case "0":
+		return "0101010"
 	case "1":
 		return "0111111"
 	case "-1":
@@ -76,8 +78,8 @@ func comp(s string) string {
 		return "0010101"
 	case "D|M":
 		return "1010101"
-	default: // case "0"
-		return "0101010"
+	default:
+		panic("wrong computation mnemonic")
 	}
 }
 
