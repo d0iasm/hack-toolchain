@@ -28,6 +28,7 @@ func assemble(s string) (string, bool) {
 		dmn := destMnemonic(s)
 		cmn := compMnemonic(s)
 		jmn := jumpMnemonic(s)
+		debug("dest: " + dmn + "comp: " + cmn + "jump: " + jmn)
 		return "111" + comp(cmn) + dest(dmn) + jump(jmn), true
 	case L_COMMAND:
 	case IGNORE:
@@ -38,7 +39,6 @@ func assemble(s string) (string, bool) {
 func buildTable(st STable, s string, addr int) int {
 	switch t := commandType(s); t {
 	case L_COMMAND:
-		debug("BUILD TABLE: ", s, addr)
 		st.addEntry(symbol(s), addr+1)
 		return addr
 	case A_COMMAND, C_COMMAND:
@@ -62,18 +62,24 @@ func main() {
 
 	st := initSTable()
 	addr := 0
+	text := ""
 	scanner := bufio.NewScanner(rfile)
 	for scanner.Scan() {
-		addr = buildTable(st, scanner.Text(), addr)
+		text = remove(scanner.Text())
+		addr = buildTable(st, text, addr)
 	}
+	err = scanner.Err()
+	check(err)
 
-	debug(addr)
-	debug(st)
+	// debug(addr)
+	// debug(st)
 
 	scanner = bufio.NewScanner(rfile)
 	writer := bufio.NewWriter(wfile)
 	for scanner.Scan() {
-		bin, isPrint := assemble(scanner.Text())
+		text = remove(scanner.Text())
+		debug(text)
+		bin, isPrint := assemble(text)
 		if isPrint {
 			fmt.Fprintln(writer, bin)
 		}

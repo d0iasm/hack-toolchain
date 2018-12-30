@@ -1,6 +1,7 @@
 package main
 
 import (
+	"regexp"
 	"strings"
 )
 
@@ -13,13 +14,19 @@ const (
 	IGNORE    COMMAND_TYPE = iota
 )
 
+func remove(s string) string {
+	s = strings.Replace(s, " ", "", -1)
+	comment := regexp.MustCompile(`//.*`)
+	return comment.ReplaceAllString(s, "")
+}
+
 func commandType(s string) COMMAND_TYPE {
 	switch {
 	case len(s) == 0 || strings.HasPrefix(s, "//"):
 		return IGNORE
 	case strings.Contains(s, "@"):
 		return A_COMMAND
-	case strings.Contains(s, "(") && strings.Contains(s, ")"):
+	case strings.HasPrefix(s, "("):
 		return L_COMMAND
 	default:
 		return C_COMMAND
