@@ -104,11 +104,14 @@ func jump(s string) string {
 	}
 }
 
-func value(s string) string {
+func value(st STable, s string) string {
 	if n, err := strconv.ParseInt(s, 10, 64); err == nil {
 		b := strconv.FormatInt(n, 2)
 		return fmt.Sprintf("%015v", b)
 	}
-	// TODO: Implement to convert symbol to binary
+	v, ok := st.getAddress(s)
+	if ok {
+		return fmt.Sprintf("%015v", v)
+	}
 	return ""
 }

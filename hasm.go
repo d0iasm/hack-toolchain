@@ -19,16 +19,15 @@ func check(e error) {
 	}
 }
 
-func assemble(s string) (string, bool) {
+func assemble(st STable, s string) (string, bool) {
 	switch t := commandType(s); t {
 	case A_COMMAND:
 		sym := symbol(s)
-		return "0" + value(sym), true
+		return "0" + value(st, sym), true
 	case C_COMMAND:
 		dmn := destMnemonic(s)
 		cmn := compMnemonic(s)
 		jmn := jumpMnemonic(s)
-		debug("dest: " + dmn + "comp: " + cmn + "jump: " + jmn)
 		return "111" + comp(cmn) + dest(dmn) + jump(jmn), true
 	case L_COMMAND:
 	case IGNORE:
@@ -74,12 +73,12 @@ func main() {
 	// debug(addr)
 	// debug(st)
 
+	rfile.Seek(0, 0)
 	scanner = bufio.NewScanner(rfile)
 	writer := bufio.NewWriter(wfile)
 	for scanner.Scan() {
 		text = remove(scanner.Text())
-		debug(text)
-		bin, isPrint := assemble(text)
+		bin, isPrint := assemble(st, text)
 		if isPrint {
 			fmt.Fprintln(writer, bin)
 		}
