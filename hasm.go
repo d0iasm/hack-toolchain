@@ -20,7 +20,7 @@ func check(e error) {
 func assemble(s string) (string, bool) {
 	switch t := commandType(s); t {
 	case A_COMMAND, C_COMMAND, L_COMMAND:
-		return s + "!", true
+		return s + " : " + symbol(s), true
 	case IGNORE:
 	}
 	return "", false
@@ -41,8 +41,7 @@ func main() {
 	scanner := bufio.NewScanner(rfile)
 	writer := bufio.NewWriter(wfile)
 	for scanner.Scan() {
-		line := scanner.Text()
-		bin, ok := assemble(line)
+		bin, ok := assemble(scanner.Text())
 		if ok {
 			fmt.Fprintln(writer, bin)
 		}

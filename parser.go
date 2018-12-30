@@ -25,3 +25,14 @@ func commandType(s string) COMMAND_TYPE {
 		return C_COMMAND
 	}
 }
+
+func symbol(s string) string {
+	t := commandType(s)
+	if t == A_COMMAND {
+		return s[1:]
+	} else if t == L_COMMAND {
+		return s[1 : len(s)-1]
+	} else {
+		panic("bad command type")
+	}
+}
