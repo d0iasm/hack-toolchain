@@ -46,6 +46,9 @@ func main() {
 	check(err)
 	defer wfile.Close()
 
+        st := initSTable()
+        debug(st)
+
 	scanner := bufio.NewScanner(rfile)
 	writer := bufio.NewWriter(wfile)
 	for scanner.Scan() {
