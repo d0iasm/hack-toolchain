@@ -8,9 +8,8 @@ import (
 )
 
 func debug(x ...interface{}) {
-	fmt.Println("----- debug start -----")
-	for i := 0; i < len(x); i++ {
-		fmt.Printf("%#v\n", x[i])
+	for i, v := range x {
+		fmt.Printf("%v: %#v\n", i, v)
 	}
 }
 
