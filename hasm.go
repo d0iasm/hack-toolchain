@@ -30,10 +30,22 @@ func assemble(s string) (string, bool) {
 		jmn := jumpMnemonic(s)
 		return "111" + comp(cmn) + dest(dmn) + jump(jmn), true
 	case L_COMMAND:
-		// TODO: Implement to add a symbol into a symbol table
 	case IGNORE:
 	}
 	return "", false
+}
+
+func buildTable(st STable, s string, addr int) int {
+	switch t := commandType(s); t {
+	case L_COMMAND:
+		debug("BUILD TABLE: ", s, addr)
+		st.addEntry(symbol(s), addr+1)
+		return addr
+	case A_COMMAND, C_COMMAND:
+		return addr + 1
+	case IGNORE:
+	}
+	return addr
 }
 
 func main() {
@@ -49,12 +61,16 @@ func main() {
 	defer wfile.Close()
 
 	st := initSTable()
-	st.addEntry("testtesttest", 99999999999)
-	debug(st.getAddress("R5"))
-	debug(st.getAddress("hoge"))
+	addr := 0
+	scanner := bufio.NewScanner(rfile)
+	for scanner.Scan() {
+		addr = buildTable(st, scanner.Text(), addr)
+	}
+
+	debug(addr)
 	debug(st)
 
-	scanner := bufio.NewScanner(rfile)
+	scanner = bufio.NewScanner(rfile)
 	writer := bufio.NewWriter(wfile)
 	for scanner.Scan() {
 		bin, isPrint := assemble(scanner.Text())
