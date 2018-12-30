@@ -33,3 +33,8 @@ func initSTable() STable {
 func (st STable) addEntry(sym string, addr int) {
 	st[sym] = addr
 }
+
+func (st STable) getAddress(sym string) (int, bool) {
+	v, ok := st[sym]
+	return v, ok
+}

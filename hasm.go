@@ -7,8 +7,11 @@ import (
 	"strings"
 )
 
-func debug(x interface{}) {
-	fmt.Printf("%#v\n", x)
+func debug(x ...interface{}) {
+	fmt.Println("----- debug start -----")
+	for i := 0; i < len(x); i++ {
+		fmt.Printf("%#v\n", x[i])
+	}
 }
 
 func check(e error) {
@@ -47,7 +50,9 @@ func main() {
 	defer wfile.Close()
 
 	st := initSTable()
-        st.addEntry("testtesttest", 99999999999)
+	st.addEntry("testtesttest", 99999999999)
+	debug(st.getAddress("R5"))
+	debug(st.getAddress("hoge"))
 	debug(st)
 
 	scanner := bufio.NewScanner(rfile)
