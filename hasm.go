@@ -22,8 +22,10 @@ func assemble(s string) (string, bool) {
 	case A_COMMAND, L_COMMAND:
 		return s + " : " + symbol(s), true
 	case C_COMMAND:
-		mn := destMnemonic(s)
-		return "111" + "0000000" + dest(mn) + "000", true
+		dmn := destMnemonic(s)
+		cmn := compMnemonic(s)
+		jmn := jumpMnemonic(s)
+                return s + ": " + "111" + comp(cmn) + dest(dmn) + jump(jmn), true
 	case IGNORE:
 	}
 	return "", false
