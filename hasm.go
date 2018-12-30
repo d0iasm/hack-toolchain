@@ -19,8 +19,10 @@ func check(e error) {
 
 func assemble(s string) (string, bool) {
 	switch t := commandType(s); t {
-	case A_COMMAND, C_COMMAND, L_COMMAND:
+	case A_COMMAND, L_COMMAND:
 		return s + " : " + symbol(s), true
+	case C_COMMAND:
+		return s + " : " + dest(s), true
 	case IGNORE:
 	}
 	return "", false

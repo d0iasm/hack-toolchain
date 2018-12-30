@@ -36,3 +36,15 @@ func symbol(s string) string {
 		panic("bad command type")
 	}
 }
+
+func dest(s string) string {
+	if commandType(s) != C_COMMAND {
+		panic("bad command type")
+	}
+
+	ss := strings.Split(s, "=")
+        if len(ss) == 1 {
+          return "0"
+        }
+	return ss[0]
+}
