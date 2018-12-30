@@ -46,8 +46,9 @@ func main() {
 	check(err)
 	defer wfile.Close()
 
-        st := initSTable()
-        debug(st)
+	st := initSTable()
+        st.addEntry("testtesttest", 99999999999)
+	debug(st)
 
 	scanner := bufio.NewScanner(rfile)
 	writer := bufio.NewWriter(wfile)

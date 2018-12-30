@@ -29,3 +29,7 @@ func initSTable() STable {
 	st["KBD"] = 24576
 	return st
 }
+
+func (st STable) addEntry(sym string, addr int) {
+	st[sym] = addr
+}
