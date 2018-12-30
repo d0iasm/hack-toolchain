@@ -32,9 +32,8 @@ func symbol(s string) string {
 		return s[1:]
 	} else if t == L_COMMAND {
 		return s[1 : len(s)-1]
-	} else {
-		panic("bad command type")
 	}
+	panic("bad command type")
 }
 
 func destMnemonic(s string) string {
@@ -60,9 +59,8 @@ func compMnemonic(s string) string {
 		return ss1[1]
 	} else if len(ss2) != 1 {
 		return ss2[0]
-	} else {
-		return "0"
 	}
+	return "0"
 }
 
 func jumpMnemonic(s string) string {

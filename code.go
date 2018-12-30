@@ -1,5 +1,10 @@
 package main
 
+import (
+	"fmt"
+	"strconv"
+)
+
 func dest(s string) string {
 	switch s {
 	case "M":
@@ -95,4 +100,13 @@ func jump(s string) string {
 	default: // case null
 		return "000"
 	}
+}
+
+func value(s string) string {
+	if n, err := strconv.ParseInt(s, 10, 64); err == nil {
+		b := strconv.FormatInt(n, 2)
+		return fmt.Sprintf("%015v", b)
+	}
+	// TODO: Implement to convert symbol to binary
+	return ""
 }

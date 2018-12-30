@@ -19,13 +19,16 @@ func check(e error) {
 
 func assemble(s string) (string, bool) {
 	switch t := commandType(s); t {
-	case A_COMMAND, L_COMMAND:
-		return s + " : " + symbol(s), true
+	case A_COMMAND:
+		sym := symbol(s)
+		return "0" + value(sym), true
 	case C_COMMAND:
 		dmn := destMnemonic(s)
 		cmn := compMnemonic(s)
 		jmn := jumpMnemonic(s)
-                return s + ": " + "111" + comp(cmn) + dest(dmn) + jump(jmn), true
+		return "111" + comp(cmn) + dest(dmn) + jump(jmn), true
+	case L_COMMAND:
+		// TODO: Implement to add a symbol into a symbol table
 	case IGNORE:
 	}
 	return "", false
@@ -46,8 +49,8 @@ func main() {
 	scanner := bufio.NewScanner(rfile)
 	writer := bufio.NewWriter(wfile)
 	for scanner.Scan() {
-		bin, ok := assemble(scanner.Text())
-		if ok {
+		bin, isPrint := assemble(scanner.Text())
+		if isPrint {
 			fmt.Fprintln(writer, bin)
 		}
 	}
