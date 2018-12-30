@@ -22,7 +22,7 @@ func assemble(s string) (string, bool) {
 	case A_COMMAND, L_COMMAND:
 		return s + " : " + symbol(s), true
 	case C_COMMAND:
-		return s + " : " + dest(s), true
+		return s + " :::::::::: dest: " + dest(s) + ", comp:" + comp(s), true
 	case IGNORE:
 	}
 	return "", false

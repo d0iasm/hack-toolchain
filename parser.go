@@ -43,8 +43,24 @@ func dest(s string) string {
 	}
 
 	ss := strings.Split(s, "=")
-        if len(ss) == 1 {
-          return "0"
-        }
+	if len(ss) == 1 {
+		return "0"
+	}
 	return ss[0]
+}
+
+func comp(s string) string {
+	if commandType(s) != C_COMMAND {
+		panic("bad command type")
+	}
+
+	ss1 := strings.Split(s, "=")
+	ss2 := strings.Split(s, ";")
+	if len(ss1) != 1 {
+		return ss1[1]
+	} else if len(ss2) != 1 {
+		return ss2[0]
+	} else {
+		return "0"
+	}
 }
