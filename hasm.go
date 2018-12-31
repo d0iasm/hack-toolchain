@@ -38,7 +38,7 @@ func assemble(st *ST, s string) (string, bool) {
 func buildTable(st *ST, s string, addr int) int {
 	switch t := commandType(s); t {
 	case L_COMMAND:
-		st.addEntry(symbol(s), addr+1)
+		st.addEntry(symbol(s), addr)
 		return addr
 	case A_COMMAND, C_COMMAND:
 		return addr + 1
@@ -63,6 +63,7 @@ func main() {
 	addr := 0
 	text := ""
 	scanner := bufio.NewScanner(rfile)
+        // First pass for building symbol table.
 	for scanner.Scan() {
 		text = remove(scanner.Text())
 		addr = buildTable(&st, text, addr)
@@ -70,12 +71,10 @@ func main() {
 	err = scanner.Err()
 	check(err)
 
-	// debug(addr)
-	// debug(st)
-
 	rfile.Seek(0, 0)
 	scanner = bufio.NewScanner(rfile)
 	writer := bufio.NewWriter(wfile)
+        // Second pass for generating binary.
 	for scanner.Scan() {
 		text = remove(scanner.Text())
 		bin, isPrint := assemble(&st, text)
@@ -83,7 +82,6 @@ func main() {
 			fmt.Fprintln(writer, bin)
 		}
 	}
-	debug(st)
 	err = scanner.Err()
 	check(err)
 	writer.Flush()
