@@ -104,17 +104,23 @@ func jump(s string) string {
 	}
 }
 
-func value(st ST, s string) string {
+func (st *ST) value(s string) string {
 	if n, err := strconv.ParseInt(s, 10, 64); err == nil {
+		// Case that convert from string of a number to binary.
 		b := strconv.FormatInt(n, 2)
 		return fmt.Sprintf("%015v", b)
 	}
 
-        v, ok := st.getAddress(s)
+	n, ok := st.getAddress(s)
 	if ok {
-		return fmt.Sprintf("%015v", v)
-	} else {
-		// TODO: addEntry(s, currentEmptyRegister)
+		// Case that symbol table already has a symbol.
+		b := strconv.FormatInt(int64(n), 2)
+		return fmt.Sprintf("%015v", b)
 	}
-	return ""
+
+	// Case that add new variable.
+	st.addEntry(s, st.varAddr)
+	b := strconv.FormatInt(int64(st.varAddr), 2)
+	st.varAddr = st.varAddr + 1
+	return fmt.Sprintf("%015v", b)
 }

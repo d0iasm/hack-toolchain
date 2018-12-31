@@ -33,11 +33,11 @@ func initST() ST {
 	return st
 }
 
-func (st ST) addEntry(sym string, addr int) {
+func (st *ST) addEntry(sym string, addr int) {
 	st.table[sym] = addr
 }
 
-func (st ST) getAddress(sym string) (int, bool) {
+func (st *ST) getAddress(sym string) (int, bool) {
 	v, ok := st.table[sym]
 	return v, ok
 }
