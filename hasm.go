@@ -19,7 +19,7 @@ func check(e error) {
 	}
 }
 
-func assemble(st STable, s string) (string, bool) {
+func assemble(st ST, s string) (string, bool) {
 	switch t := commandType(s); t {
 	case A_COMMAND:
 		sym := symbol(s)
@@ -35,7 +35,7 @@ func assemble(st STable, s string) (string, bool) {
 	return "", false
 }
 
-func buildTable(st STable, s string, addr int) int {
+func buildTable(st ST, s string, addr int) int {
 	switch t := commandType(s); t {
 	case L_COMMAND:
 		st.addEntry(symbol(s), addr+1)
@@ -59,7 +59,7 @@ func main() {
 	check(err)
 	defer wfile.Close()
 
-	st := initSTable()
+	st := initST()
 	addr := 0
 	text := ""
 	scanner := bufio.NewScanner(rfile)
