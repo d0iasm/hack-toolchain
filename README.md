@@ -3,7 +3,7 @@ Hack assembler from .asm to .hack written in Go. You can use this assembler just
 
 ## Usage
 ```
-$ ./hasm Rect.asm
+$ ./hasm hoge.asm
 ```
 
 ### Sample code
