@@ -1,9 +1,17 @@
-# hasm
+# Hack Toolchain
+Assembler, virtual machine translator, and compiler for Hack language.
+
+## hasm
 Hack assembler from .asm to .hack written in Go. You can use this assembler just by `./hasm <xxx.asm>`.
 
-## Usage
+### Usage
 ```
 $ ./hasm hoge.asm
+```
+
+### Build
+```
+$ go build hasm.go code.go parser.go symboltable.go
 ```
 
 ### Sample code
@@ -78,14 +86,8 @@ Result: Rect.hack
 1110101010000111
 ```
 
-
-## Build
-```
-$ go build hasm.go code.go parser.go symboltable.go
-```
-
-## Requirements
+### Requirements
 - go version go1.11.4
 
-## Resources
+### Resources
 This is the part of the project Nand2Tetris. All resources are available online. See more https://www.nand2tetris.org/

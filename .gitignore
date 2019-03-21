@@ -12,7 +12,7 @@
 *.out
 
 # Assembly and binary for hack machine
-*.asm
-*.hack
-hasm
-data
+hasm/*.asm
+hasm/*.hack
+hasm/hasm
+hasm/data
