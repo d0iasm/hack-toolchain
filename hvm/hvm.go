@@ -8,6 +8,10 @@ import (
 	"strings"
 )
 
+type Register struct {
+	constant []int
+}
+
 func debug(x ...interface{}) {
 	for i, v := range x {
 		fmt.Printf("%v: %#v\n", i, v)
@@ -44,15 +48,16 @@ func main() {
 	scanner := bufio.NewScanner(rfile)
 	writer := bufio.NewWriter(wfile)
 	text := ""
-        tokens := []string{}
+	tokens := []string{}
 	for scanner.Scan() {
 		text = remove(scanner.Text())
-                tokens = tokenize(text)
+		tokens = tokenize(text)
 		fmt.Fprintln(writer, tokens)
 		fmt.Println(commandType(tokens))
+		fmt.Println(tokens)
+		fmt.Println(writeArithmetic(tokens[0]))
 	}
 	err = scanner.Err()
 	check(err)
 	writer.Flush()
 }
-
