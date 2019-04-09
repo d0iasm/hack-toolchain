@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"regexp"
 	"strings"
 )
 
@@ -19,6 +20,15 @@ func check(e error) {
 	}
 }
 
+func remove(s string) string {
+	comment := regexp.MustCompile(`//.*`)
+	return comment.ReplaceAllString(s, "")
+}
+
+func tokenize(s string) []string {
+	return strings.Split(s, " ")
+}
+
 func main() {
 	fname := os.Args[1]
 	fsplit := strings.Split(fname, ".")
@@ -31,14 +41,18 @@ func main() {
 	check(err)
 	defer wfile.Close()
 
-        scanner := bufio.NewScanner(rfile)
+	scanner := bufio.NewScanner(rfile)
 	writer := bufio.NewWriter(wfile)
-        text := ""
+	text := ""
+        tokens := []string{}
 	for scanner.Scan() {
-		text = scanner.Text()
-		fmt.Fprintln(writer, text)
+		text = remove(scanner.Text())
+                tokens = tokenize(text)
+		fmt.Fprintln(writer, tokens)
+		fmt.Println(commandType(tokens))
 	}
 	err = scanner.Err()
 	check(err)
 	writer.Flush()
 }
+
