@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-type Register struct {
+type Stack struct {
 	constant []int
 }
 

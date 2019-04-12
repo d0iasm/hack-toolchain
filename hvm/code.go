@@ -24,3 +24,20 @@ func writeArithmetic(c string) string {
 		return ""
 	}
 }
+
+func writePushPop(c COMMAND_TYPE, seg string, idx int) {
+	// Stack pointer is hold at RAM[0].
+	// Stack base starts from RAM[256].
+	switch seg {
+	case "push":
+		return `@0
+  M=D
+  M=M+1
+`
+	case "pop":
+		return `@0
+  D=M
+  M=M-1
+  `
+	}
+}

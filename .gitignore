@@ -16,3 +16,7 @@ hasm/*.asm
 hasm/*.hack
 hasm/hasm
 hasm/data
+
+# Assembly and binary for hack VM traslator.
+hvm/*
+!hvm/*.go

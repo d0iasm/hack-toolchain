@@ -6,3 +6,5 @@ default:
 hvm: $(FILES)
 	go build $(FILES)
 
+clean:
+	rm *.asm
