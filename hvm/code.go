@@ -55,9 +55,9 @@ func (cw *CodeWriter) scan() bool {
 	return cw.scanner.Scan()
 }
 
-func (cw *CodeWriter) writeArithmetic(arg1 ARG1) {
+func (cw *CodeWriter) writeArithmetic(arithmetic string) {
 	command := ""
-	switch arg1 {
+	switch arithmetic {
 	case "add":
 		command = "M=D+M"
 	case "sub":

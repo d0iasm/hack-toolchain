@@ -39,7 +39,7 @@ func remove(s string) string {
 
 func (s *Stack) initStacks() {
 	for i := 0; i < 32767; i++ {
-		s.s["constant"][i] = i
+		s.s["constant"] = append(s.s["constant"], i)
 	}
 }
 
@@ -51,18 +51,17 @@ func main() {
 	cw := createCodeWriter(filename)
 
 	for cw.scan() {
-		token := tokenize(remove(cw.text()))
-		//fmt.Fprintln(cw.writer, token)
-		switch token.ct {
-		case C_ARTHMETIC:
-			cw.writeArithmetic(token.arg1)
+		t := tokenize(remove(cw.text()))
+		switch t.ct {
+		case C_ARITHMETIC:
+			cw.writeArithmetic(t.command)
 		case C_PUSH:
 		case C_POP:
-			cw.writePushPop(token.ct, token.arg1, token.immed)
+			cw.writePushPop(t.ct, t.arg1, t.arg2)
 		}
 
 		fmt.Println(cw.text())
-		fmt.Println(token)
+		fmt.Println(t)
 	}
 
 	cw.close()
