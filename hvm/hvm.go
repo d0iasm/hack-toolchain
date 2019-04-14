@@ -29,10 +29,6 @@ func remove(s string) string {
 	return comment.ReplaceAllString(s, "")
 }
 
-func tokenize(s string) []string {
-	return strings.Split(s, " ")
-}
-
 func main() {
 	fname := os.Args[1]
 	fsplit := strings.Split(fname, ".")
@@ -47,15 +43,11 @@ func main() {
 
 	scanner := bufio.NewScanner(rfile)
 	writer := bufio.NewWriter(wfile)
-	text := ""
-	tokens := []string{}
 	for scanner.Scan() {
-		text = remove(scanner.Text())
-		tokens = tokenize(text)
-		fmt.Fprintln(writer, tokens)
-		fmt.Println(commandType(tokens))
-		fmt.Println(tokens)
-		fmt.Println(writeArithmetic(tokens[0]))
+		text := remove(scanner.Text())
+		token := tokenize(text)
+		fmt.Fprintln(writer, token)
+		fmt.Println(token)
 	}
 	err = scanner.Err()
 	check(err)

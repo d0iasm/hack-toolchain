@@ -1,31 +1,31 @@
 package main
 
-func writeArithmetic(c string) string {
-	switch c {
-	case arithmetic[0]: // add
+func writeArithmetic(arg1 ARG1) string {
+	switch arg1 {
+	case "add":
 		return "M=D+M"
-	case arithmetic[1]: // sub
+	case "sub":
 		return "M=M-D"
-	case arithmetic[2]: // neg
+	case "neg":
 		return "M=-M"
-	case arithmetic[3]: // eq
+	case "eq":
 		return "JEQ"
-	case arithmetic[4]: // gt
+	case "gt":
 		return "JGT"
-	case arithmetic[5]: // lt
+	case "lt":
 		return "JLT"
-	case arithmetic[6]: // and
+	case "and":
 		return "M=D&M"
-	case arithmetic[7]: // or
+	case "or":
 		return "M=D|A"
-	case arithmetic[8]: // not
+	case "not":
 		return "M=!M"
 	default:
 		return ""
 	}
 }
 
-func writePushPop(c COMMAND_TYPE, seg string, idx int) {
+func writePushPop(c COMMAND_TYPE, seg string, idx int) string {
 	// Stack pointer is hold at RAM[0].
 	// Stack base starts from RAM[256].
 	switch seg {
@@ -39,5 +39,7 @@ func writePushPop(c COMMAND_TYPE, seg string, idx int) {
   D=M
   M=M-1
   `
+	default:
+		return ""
 	}
 }
