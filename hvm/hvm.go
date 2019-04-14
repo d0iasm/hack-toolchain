@@ -41,13 +41,13 @@ func main() {
 	filename := os.Args[1]
 	cw := createCodeWriter(filename)
 
-	for cw.scanner.Scan() {
-		text := remove(cw.scanner.Text())
-		token := tokenize(text)
+	for cw.scan() {
+		token := tokenize(remove(cw.text()))
 		fmt.Fprintln(cw.writer, token)
 
-		fmt.Println(cw.scanner.Text())
+		fmt.Println(cw.text())
 		fmt.Println(token)
 	}
+
 	cw.close()
 }

@@ -47,8 +47,12 @@ func (cw *CodeWriter) close() {
 	cw.output.Close()
 }
 
-func (cw *CodeWriter) next() (string, bool) {
-	return cw.scanner.Text(), cw.scanner.Scan()
+func (cw *CodeWriter) text() string {
+	return cw.scanner.Text()
+}
+
+func (cw *CodeWriter) scan() bool {
+	return cw.scanner.Scan()
 }
 
 func writeArithmetic(arg1 ARG1) string {
