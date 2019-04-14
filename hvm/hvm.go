@@ -17,7 +17,7 @@ const (
 )
 
 type Stack struct {
-	constant []int
+	s map[string][]int
 }
 
 func debug(x ...interface{}) {
@@ -37,14 +37,29 @@ func remove(s string) string {
 	return comment.ReplaceAllString(s, "")
 }
 
+func (s *Stack) initStacks() {
+	for i := 0; i < 32767; i++ {
+		s.s["constant"][i] = i
+	}
+}
+
 func main() {
+	s := &Stack{make(map[string][]int)}
+	s.initStacks()
+
 	filename := os.Args[1]
 	cw := createCodeWriter(filename)
 
 	for cw.scan() {
 		token := tokenize(remove(cw.text()))
 		//fmt.Fprintln(cw.writer, token)
-		cw.writeArithmetic(token.arg1)
+		switch token.ct {
+		case C_ARTHMETIC:
+			cw.writeArithmetic(token.arg1)
+		case C_PUSH:
+		case C_POP:
+			cw.writePushPop(token.ct, token.arg1, token.immed)
+		}
 
 		fmt.Println(cw.text())
 		fmt.Println(token)

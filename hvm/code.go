@@ -82,21 +82,24 @@ func (cw *CodeWriter) writeArithmetic(arg1 ARG1) {
 	}
 }
 
-func writePushPop(c COMMAND_TYPE, seg string, idx int) string {
-	// Stack pointer is hold at RAM[0].
+func (cw *CodeWriter) writePushPop(ct COMMAND_TYPE, seg string, idx int) {
+	// Stack pointer(SP) is hold at RAM[0].
 	// Stack base starts from RAM[256].
-	switch seg {
-	case "push":
-		return `@0
-  M=D
+	command := ""
+
+	switch ct {
+	case C_PUSH:
+		command = `@SP
+  A=M
   M=M+1
 `
-	case "pop":
-		return `@0
+	case C_POP:
+		command = `@0
   D=M
   M=M-1
   `
-	default:
-		return ""
+	}
+	if command != "" {
+		fmt.Fprintln(cw.writer, command)
 	}
 }
