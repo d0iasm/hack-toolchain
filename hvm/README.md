@@ -52,6 +52,27 @@ todo
 - RAM[5-12] TEMP Hold the contents of the temp segment.
 - RAM[13-15] (-) Can be used by the VM implementation as general-purpose registers. 
 
+## Assembly
+### Registers as an assembly layer
+- D: 16-bit register used to store data values.
+- A: 16-bit register used as both a data register and an address register depends on the instruction context.
+  - A register can access to the memory directly.
+
+### Example Code
+```
+@16 // Store the number 16 to A register.
+
+A=D-1 // Store the result of D minus 1 to A register.
+D=!A // Store the result of bit NOT opeation of A to D register.
+
+// M always refers to the memory word whose address is the current value of the A register.
+D=M+1 // Store the result of Memory[A's data] plus 1 to D register.
+
+// D = Memory[516] - 1
+@516
+D=M-1
+```
+
 ## Implementation Steps
 1. Handling stack arithmetic commands, which exists 9 types.
 2. Handling memory access commands.
