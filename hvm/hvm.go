@@ -43,7 +43,8 @@ func main() {
 
 	for cw.scan() {
 		token := tokenize(remove(cw.text()))
-		fmt.Fprintln(cw.writer, token)
+		//fmt.Fprintln(cw.writer, token)
+		cw.writeArithmetic(token.arg1)
 
 		fmt.Println(cw.text())
 		fmt.Println(token)

@@ -55,28 +55,30 @@ func (cw *CodeWriter) scan() bool {
 	return cw.scanner.Scan()
 }
 
-func writeArithmetic(arg1 ARG1) string {
+func (cw *CodeWriter) writeArithmetic(arg1 ARG1) {
+	command := ""
 	switch arg1 {
 	case "add":
-		return "M=D+M"
+		command = "M=D+M"
 	case "sub":
-		return "M=M-D"
+		command = "M=M-D"
 	case "neg":
-		return "M=-M"
+		command = "M=-M"
 	case "eq":
-		return "JEQ"
+		command = "JEQ"
 	case "gt":
-		return "JGT"
+		command = "JGT"
 	case "lt":
-		return "JLT"
+		command = "JLT"
 	case "and":
-		return "M=D&M"
+		command = "M=D&M"
 	case "or":
-		return "M=D|A"
+		command = "M=D|A"
 	case "not":
-		return "M=!M"
-	default:
-		return ""
+		command = "M=!M"
+	}
+	if command != "" {
+		fmt.Fprintln(cw.writer, command)
 	}
 }
 
