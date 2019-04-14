@@ -1,5 +1,56 @@
 package main
 
+import (
+	"bufio"
+	"os"
+	"strings"
+)
+
+type CodeWriter struct {
+	input    *os.File
+	output   *os.File
+	basename string
+	scanner  *bufio.Scanner
+	writer   *bufio.Writer
+}
+
+func createCodeWriter(inname string) *CodeWriter {
+	s := strings.Split(inname, ".")
+	basename, extension := s[0], s[1]
+
+	if extension != "vm" {
+		panic("Input file should have .vm extension.")
+	}
+
+	input, err := os.Open(inname)
+	check(err)
+	// defer inputfile.Close()
+
+	outname := basename + ".asm"
+
+	output, err := os.Create(outname)
+	check(err)
+	// defer outputfile.Close()
+
+	scanner := bufio.NewScanner(input)
+	writer := bufio.NewWriter(output)
+
+	return &CodeWriter{input, output, basename, scanner, writer}
+}
+
+func (w *CodeWriter) close() {
+	err := w.scanner.Err()
+	check(err)
+	w.writer.Flush()
+
+	w.input.Close()
+	w.output.Close()
+}
+
+func (w *CodeWriter) next() (string, bool) {
+	return w.scanner.Text(), w.scanner.Scan()
+}
+
 func writeArithmetic(arg1 ARG1) string {
 	switch arg1 {
 	case "add":

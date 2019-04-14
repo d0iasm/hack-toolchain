@@ -1,11 +1,19 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 	"regexp"
-	"strings"
+)
+
+const (
+	SP   int = 0 // RAM[0] Stack pointer: points to the next topmost location in the stack.
+	LCL  int = 1 // RAM[1] Points to the base of the current VM function's local segment.
+	ARG  int = 2 // RAM[2] Points to the base of the current VM function 's argument segment.
+	THIS int = 3 // RAM[3] Points to the base of the current this segment (within the heap).
+	THAT int = 4 // RAM[4] Points to the base of the current that segment (within the heap).
+	TEMP int = 5 // RAM[5-12] Hold the contents of the temp segment
+// RAM[13-15] Can be used by the VM implementation as general-purpose registers.
 )
 
 type Stack struct {
@@ -30,26 +38,14 @@ func remove(s string) string {
 }
 
 func main() {
-	fname := os.Args[1]
-	fsplit := strings.Split(fname, ".")
+	filename := os.Args[1]
+	cw := createCodeWriter(filename)
 
-	rfile, err := os.Open(fname)
-	check(err)
-	defer rfile.Close()
-
-	wfile, err := os.Create(fsplit[0] + ".asm")
-	check(err)
-	defer wfile.Close()
-
-	scanner := bufio.NewScanner(rfile)
-	writer := bufio.NewWriter(wfile)
-	for scanner.Scan() {
-		text := remove(scanner.Text())
+	for cw.scanner.Scan() {
+		text := remove(cw.scanner.Text())
 		token := tokenize(text)
-		fmt.Fprintln(writer, token)
+		fmt.Fprintln(cw.writer, token)
 		fmt.Println(token)
 	}
-	err = scanner.Err()
-	check(err)
-	writer.Flush()
+	cw.close()
 }
