@@ -45,6 +45,8 @@ func main() {
 		text := remove(cw.scanner.Text())
 		token := tokenize(text)
 		fmt.Fprintln(cw.writer, token)
+
+		fmt.Println(cw.scanner.Text())
 		fmt.Println(token)
 	}
 	cw.close()

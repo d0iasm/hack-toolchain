@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 	"strings"
 )
@@ -24,13 +25,11 @@ func createCodeWriter(inname string) *CodeWriter {
 
 	input, err := os.Open(inname)
 	check(err)
-	// defer inputfile.Close()
 
 	outname := basename + ".asm"
 
 	output, err := os.Create(outname)
 	check(err)
-	// defer outputfile.Close()
 
 	scanner := bufio.NewScanner(input)
 	writer := bufio.NewWriter(output)
@@ -38,17 +37,18 @@ func createCodeWriter(inname string) *CodeWriter {
 	return &CodeWriter{input, output, basename, scanner, writer}
 }
 
-func (w *CodeWriter) close() {
-	err := w.scanner.Err()
+func (cw *CodeWriter) close() {
+	err := cw.scanner.Err()
+	fmt.Println(cw)
 	check(err)
-	w.writer.Flush()
+	cw.writer.Flush()
 
-	w.input.Close()
-	w.output.Close()
+	cw.input.Close()
+	cw.output.Close()
 }
 
-func (w *CodeWriter) next() (string, bool) {
-	return w.scanner.Text(), w.scanner.Scan()
+func (cw *CodeWriter) next() (string, bool) {
+	return cw.scanner.Text(), cw.scanner.Scan()
 }
 
 func writeArithmetic(arg1 ARG1) string {
