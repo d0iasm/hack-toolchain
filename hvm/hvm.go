@@ -56,6 +56,7 @@ func main() {
 		case C_ARITHMETIC:
 			cw.writeArithmetic(t.command)
 		case C_PUSH:
+			cw.writePushPop(t.ct, t.arg1, t.arg2)
 		case C_POP:
 			cw.writePushPop(t.ct, t.arg1, t.arg2)
 		}

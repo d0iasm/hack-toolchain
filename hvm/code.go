@@ -89,15 +89,13 @@ func (cw *CodeWriter) writePushPop(ct COMMAND_TYPE, seg string, idx int) {
 
 	switch ct {
 	case C_PUSH:
-		command = `@SP
-  A=M
-  M=M+1
-`
+		command += "@SP\n"
+                command += "A=M\n"
+                command += "M=M+1"
 	case C_POP:
-		command = `@0
-  D=M
-  M=M-1
-  `
+		command += "@0\n"
+                command += "D=M\n"
+                command += "M=M-1"
 	}
 	if command != "" {
 		fmt.Fprintln(cw.writer, command)
