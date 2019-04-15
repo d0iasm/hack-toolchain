@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+        "strconv"
 )
 
 type CodeWriter struct {
@@ -56,48 +57,54 @@ func (cw *CodeWriter) scan() bool {
 }
 
 func (cw *CodeWriter) writeArithmetic(arithmetic string) {
-	command := ""
+	asm := ""
 	switch arithmetic {
 	case "add":
-		command = "M=D+M"
+		asm += "M=D+M"
 	case "sub":
-		command = "M=M-D"
+		asm += "M=M-D"
 	case "neg":
-		command = "M=-M"
+		asm += "M=-M"
 	case "eq":
-		command = "JEQ"
+		asm += "JEQ"
 	case "gt":
-		command = "JGT"
+		asm += "JGT"
 	case "lt":
-		command = "JLT"
+		asm += "JLT"
 	case "and":
-		command = "M=D&M"
+		asm += "M=D&M"
 	case "or":
-		command = "M=D|A"
+		asm += "M=D|A"
 	case "not":
-		command = "M=!M"
+		asm += "M=!M"
 	}
-	if command != "" {
-		fmt.Fprintln(cw.writer, command)
+	if asm != "" {
+		fmt.Fprintln(cw.writer, asm)
 	}
 }
 
-func (cw *CodeWriter) writePushPop(ct COMMAND_TYPE, seg string, idx int) {
+func (cw *CodeWriter) writePushPop(ct COMMAND_TYPE, s *Stack, seg string, idx int) {
 	// Stack pointer(SP) is hold at RAM[0].
 	// Stack base starts from RAM[256].
-	command := ""
+	asm := ""
+        val := s.s[seg][idx]
 
 	switch ct {
 	case C_PUSH:
-		command += "@SP\n"
-                command += "A=M\n"
-                command += "M=M+1"
+          asm += "@" + strconv.Itoa(val) + "\n"
+          asm += "D=A\n" // D = stack[idx]
+		asm += "@SP\n"
+                asm += "A=M\n"
+                asm += "M=D" // RAM[SP] = D
+                asm += "@SP\n"
+                asm += "M=M+1\n" // RAM[SP]++
 	case C_POP:
-		command += "@0\n"
-                command += "D=M\n"
-                command += "M=M-1"
+          // TODO: Where should I store D?
+		asm += "@SP\n"
+                asm += "A=M\n"
+                asm += "D=M\n" // D = RAM[SP]
 	}
-	if command != "" {
-		fmt.Fprintln(cw.writer, command)
+	if asm != "" {
+		fmt.Fprintln(cw.writer, asm)
 	}
 }
