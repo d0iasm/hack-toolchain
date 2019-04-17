@@ -57,7 +57,7 @@ func (cw *CodeWriter) scan() bool {
 }
 
 func (cw *CodeWriter) writeArithmetic(arithmetic string) {
-	if isArithmetic(arithmetic) {
+	if !isArithmetic(arithmetic) {
 		panic(arithmetic + " is not arithmetic opcode")
 	}
 
