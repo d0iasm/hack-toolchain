@@ -61,20 +61,18 @@ func (cw *CodeWriter) writeArithmetic(arithmetic string) {
 		panic(arithmetic + " is not arithmetic opcode")
 	}
 
-	// Stack pointer should be decremented
-	// because current SP indicates next empty place.
+	// Decrement the stack pointer.
 	asm := "@SP\n"
-	asm += "M=M-1\n" // sp--
+	asm += "AM=M-1\n" // sp--
 	// Get the topmost data in the stack and
 	// store it into D register.
-	asm += "A=M\n" // A = sp
 	asm += "D=M\n" // D = RAM[sp]
+	asm += "M=0"   // Clean up the old data.
 	switch arithmetic {
 	case "add":
 		asm += "@SP\n"
-		asm += "M=M-1\n" // sp--
-		asm += "A=M\n"   // A = sp
-		asm += "M=M+D\n" // RAM[sp] = RAM[sp] + D
+		asm += "AM=M-1\n" // sp--
+		asm += "M=M+D\n"  // RAM[sp] = RAM[sp] + D
 	case "sub":
 		asm += "M=M-D"
 	case "neg":
@@ -92,6 +90,10 @@ func (cw *CodeWriter) writeArithmetic(arithmetic string) {
 	case "not":
 		asm += "M=!M"
 	}
+	// Increment the stack pointer.
+	asm += "@SP\n"
+	asm += "M=M+1" // sp++
+
 	fmt.Fprintln(cw.writer, asm)
 }
 
