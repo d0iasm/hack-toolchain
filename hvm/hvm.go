@@ -24,8 +24,8 @@ func debug(x ...interface{}) {
 	for i, v := range x {
 		fmt.Printf("%v: %#v\n", i, v)
 
-              }
-            }
+	}
+}
 
 func check(e error) {
 	if e != nil {
@@ -65,6 +65,5 @@ func main() {
 		fmt.Println(cw.text())
 		fmt.Println(t)
 	}
-
 	cw.close()
 }

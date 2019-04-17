@@ -4,8 +4,8 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
-        "strconv"
 )
 
 type CodeWriter struct {
@@ -57,10 +57,24 @@ func (cw *CodeWriter) scan() bool {
 }
 
 func (cw *CodeWriter) writeArithmetic(arithmetic string) {
-	asm := ""
+	if isArithmetic(arithmetic) {
+		panic(arithmetic + " is not arithmetic opcode")
+	}
+
+	// Stack pointer should be decremented
+	// because current SP indicates next empty place.
+	asm := "@SP\n"
+	asm += "M=M-1\n" // sp--
+	// Get the topmost data in the stack and
+	// store it into D register.
+	asm += "A=M\n" // A = sp
+	asm += "D=M\n" // D = RAM[sp]
 	switch arithmetic {
 	case "add":
-		asm += "M=D+M"
+		asm += "@SP\n"
+		asm += "M=M-1\n" // sp--
+		asm += "A=M\n"   // A = sp
+		asm += "M=M+D\n" // RAM[sp] = RAM[sp] + D
 	case "sub":
 		asm += "M=M-D"
 	case "neg":
@@ -78,31 +92,29 @@ func (cw *CodeWriter) writeArithmetic(arithmetic string) {
 	case "not":
 		asm += "M=!M"
 	}
-	if asm != "" {
-		fmt.Fprintln(cw.writer, asm)
-	}
+	fmt.Fprintln(cw.writer, asm)
 }
 
 func (cw *CodeWriter) writePushPop(ct COMMAND_TYPE, s *Stack, seg string, idx int) {
 	// Stack pointer(SP) is hold at RAM[0].
 	// Stack base starts from RAM[256].
 	asm := ""
-        val := s.s[seg][idx]
+	val := s.s[seg][idx]
 
 	switch ct {
 	case C_PUSH:
-          asm += "@" + strconv.Itoa(val) + "\n"
-          asm += "D=A\n" // D = stack[idx]
+		asm += "@" + strconv.Itoa(val) + "\n"
+		asm += "D=A\n" // D = stack[idx]
 		asm += "@SP\n"
-                asm += "A=M\n"
-                asm += "M=D" // RAM[SP] = D
-                asm += "@SP\n"
-                asm += "M=M+1\n" // RAM[SP]++
+		asm += "A=M\n"
+		asm += "M=D\n" // RAM[sp] = D
+		asm += "@SP\n"
+		asm += "M=M+1\n" // RAM[sp]++
 	case C_POP:
-          // TODO: Where should I store D?
+		// TODO: Where should I store D?
 		asm += "@SP\n"
-                asm += "A=M\n"
-                asm += "D=M\n" // D = RAM[SP]
+		asm += "A=M\n"
+		asm += "D=M\n" // D = RAM[sp]
 	}
 	if asm != "" {
 		fmt.Fprintln(cw.writer, asm)
